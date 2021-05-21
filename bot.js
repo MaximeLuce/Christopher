@@ -128,7 +128,7 @@ cron.schedule('0 8 * * *', () => {
         "Snow": "Neige"
       }
 
-      const villes = ['Paris', 'Lille','Niort', 'Strasbourg', 'Caen', 'Brest', 'Nantes', 'Limoges', 'Bordeaux', 'Toulouse', 'Perpignan', 'Montpellier', 'Nice', 'Clermont-Ferrand', 'Lyon', 'Dijon', 'Bourges']
+      const villes = ['Paris', 'Lille', 'Strasbourg', 'Caen', 'Brest', 'Nantes', 'Limoges', 'Bordeaux', 'Toulouse', 'Perpignan', 'Montpellier', 'Nice', 'Clermont-Ferrand', 'Lyon', 'Dijon', 'Bourges']
 
       weather.find({search: villes[Math.floor(Math.random() * villes.length)], degreeType: 'C'}, function(err, result) {
         const current = result[0].current
