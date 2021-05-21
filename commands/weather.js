@@ -11,7 +11,7 @@ exports.run = async (_client, message, args) => {
     weather.find({search: args.join(" "), degreeType: 'C'}, function(err, result) {
 
 
-        if (!result) {
+        if (!result[0]) {
             message.channel.send("Je n'ai pas trouvé cette ville")
             return;
         }
