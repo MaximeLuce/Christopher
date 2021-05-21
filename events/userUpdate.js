@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js')
 
-module.exports = async (_client, oldUser, newUser) => {
+module.exports = async (client, oldUser, newUser) => {
     const embed = new MessageEmbed()
     .setColor('#3867d6')
     .attachFiles(['assets/images/camera.png'])
@@ -24,5 +24,5 @@ module.exports = async (_client, oldUser, newUser) => {
     }
 
     client.channels.cache.get('835593178064486470').send(embed)
-    
+
 }
