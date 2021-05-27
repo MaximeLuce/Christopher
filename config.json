@@ -1,0 +1,10 @@
+{
+    "token": "le_token_du_bot",
+    "perms": ["perms des admisn"],
+    "connexion": {
+        "host": "localhost",
+        "user": "user",
+        "password": "Cmdp",
+        "database": "christopher"
+    }
+}
