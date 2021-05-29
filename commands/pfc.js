@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js')
 
 exports.run = async (_client, message, args) => {
-    if (!args[0] || (args[0] !== 'pierre' && args[0] !== 'feuille' && args[0] === 'ciseaux')) {
+    if (!args[0] || (args[0] !== 'pierre' && args[0] !== 'feuille' && args[0] !== 'ciseaux')) {
         message.channel.send('Tu dois m\'indiquer ton jeu ! pierre, feuille ou ciseaux')
         return
       }
