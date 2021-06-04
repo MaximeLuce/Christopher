@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js')
 const fetch = require('node-fetch')
+var dateFormat = require('dateformat');
 
 exports.run = async (_client, message, args) => {
 
@@ -12,7 +13,7 @@ exports.run = async (_client, message, args) => {
       const body = await res.json()
 
       if (!body.resultCount) {
-        message.channel.send('Aucun résultat trouvé !')
+        message.channel.send('Aucun rÃ©sultat trouvÃ© !')
         return
       }
 
@@ -24,7 +25,7 @@ exports.run = async (_client, message, args) => {
     .setTitle(data.trackName)
     .addField("Artiste :", data.artistName)
     .addField("Album :", data.collectionName)
-    .addField("Date de sortie :", data.releaseDate)
+    .addField("Date de sortie :", dateFormat(data.releaseDate, "dd/mm/yyyy"))
     .addField("Genre :", data.primaryGenreName)
     .setColor('#3867d6')
     .attachFiles(['assets/images/logo.png'])
