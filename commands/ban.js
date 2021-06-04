@@ -12,6 +12,10 @@ exports.run = async (client, message, args) => {
 
         if(!ban) return message.channel.send('Cet utilisateur n\'existe pas !')
 
+        if(!message.guild.me.hasPermission("BAN_MEMBERS")) {
+            return message.channel.send("Je n'ai pas la permission pour ban !");
+        }
+
         if(!ban.bannable) {
             return message.channel.send("Ban impossible !");
         }
