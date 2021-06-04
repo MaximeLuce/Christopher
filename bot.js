@@ -85,7 +85,7 @@ cron.schedule(`* * * * *`, () => {
     timezone: "Europe/Paris"
 })
 
-cron.schedule('* * * * *', () => {
+cron.schedule('0 8 * * *', () => {
   connection.query(
     `SELECT * FROM birthdays WHERE date = ?`,
     [moment().format("DD/MM")],
