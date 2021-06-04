@@ -9,7 +9,7 @@ const connection = createConnection({
   });
 
 exports.run = async (_client, message, args) => {
-    if (!config.perms.includes(message.author.id)) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
+    if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
 
     const mention = message.mentions.members.first() || message.author
 
