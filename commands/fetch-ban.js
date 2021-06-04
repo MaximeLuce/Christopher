@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 const { perms } = require('../config.json')
 
 exports.run = async (client, message, args) => {
-    if (!perms.includes(message.author.id)) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
+    if (!message.member.hasPermission("BAN_MEMBERS")) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
 
         if(!args[0]) return message.channel.send("Tu dois m'indiquer un ID !")
         
@@ -10,8 +10,6 @@ exports.run = async (client, message, args) => {
 
         try {
             const ban = await client.users.fetch(args[0])
-
-            if(!message.guild.me.hasPermission("BAN_MEMBERS")) return message.channel.send("Je n'ai pas la permission pour ban !");
 
             message.guild.members.ban(ban.id, { reason: reason }).then(user => {
                 message.channel.send(`**${user.tag}** a été banni par **${message.author.tag}** pour **${reason}**`)
