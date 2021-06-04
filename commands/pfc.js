@@ -13,7 +13,7 @@ exports.run = async (_client, message, args) => {
         .attachFiles(['assets/images/logo.png'])
         .setAuthor('Le Max de Culture', 'attachment://logo.png', 'https://le-max-de-culture.fr/')
   
-      const reponse = Math.floor(Math.random() * (3 - 1 + 1)) + 1
+      const reponse = Math.floor(Math.random() * 3) + 1
   
       if (args[0] === 'pierre') {
         switch (reponse) {
@@ -21,31 +21,31 @@ exports.run = async (_client, message, args) => {
             embed.setDescription('Pierre ! Égalité !')
             break
           case 2:
-            embed.setDescription('Papier ! Perdu !')
+            embed.setDescription('Papier ! T\'as perdu !')
             break
           case 3:
-            embed.setDescription('Ciseaux ! Gagné !')
+            embed.setDescription('Ciseaux ! T\'as gagné !')
             break
         }
       } else if (args[0] === 'feuille') {
         switch (reponse) {
           case 1:
-            embed.setDescription('Pierre ! Gagné !')
+            embed.setDescription('Pierre ! T\'as gagné !')
             break
           case 2:
             embed.setDescription('Papier ! Égalité !')
             break
           case 3:
-            embed.setDescription('Ciseaux ! Perdu !')
+            embed.setDescription('Ciseaux ! T\'as perdu !')
             break
         }
       } else if (args[0] === 'ciseaux') {
         switch (reponse) {
           case 1:
-            embed.setDescription('Pierre ! Perdu !')
+            embed.setDescription('Pierre ! T\'as perdu !')
             break
           case 2:
-            embed.setDescription('Papier ! Gagné !')
+            embed.setDescription('Papier ! T\'as gagné !')
             break
           case 3:
             embed.setDescription('Ciseaux ! Égalité !')
