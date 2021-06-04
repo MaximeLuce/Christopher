@@ -26,14 +26,12 @@ exports.run = async (_client, message, args) => {
         [mention.id],
         function(err, results) {
           if (err) console.log(err)
-          if(!results[0]) connection.query(`INSERT INTO birthdays (date, id) VALUES (${date}, ${mention.id})`)
-
-          connection.query(`UPDATE birthdays SET date = ? WHERE id = ?`, [date, mention.id])
+          if(!results[0]) connection.query(`INSERT INTO birthdays (date, id) VALUES (?,?)`, [date, mention.id])
+          else connection.query(`UPDATE birthdays SET date = ? WHERE id = ?`, [date, mention.id])
         }
       );
 
       return message.channel.send(`Anniversaire correctement programmé pour ${mention} au ${date}`)
-
 }
 
 exports.help = {
