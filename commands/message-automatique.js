@@ -1,5 +1,6 @@
 const { createConnection } = require('mysql2');
 const config = require('../config.json')
+const moment = require("date")
 
 const connection = createConnection({
     host: config.connexion.host,
@@ -13,13 +14,17 @@ exports.run = async (_client, message, args) => {
 
     if (!args[0]) return message.channel.send('Il faut indiquer une date !')
 
-      if (!args[0].match(/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})-([0-9]{2}):([0-9]{2})$/gm)) return message.channel.send('La date n\'est pas dans le bon format (JJ-MM-YYYY-hh:mm)')
+      if (!args[0].match(/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})-([0-9]{2}):([0-9]{2})$/gm)) return message.channel.send('La date n\'est pas dans le bon format (JJ/MM/YYYY-hh:mm)')
+
+      var myDate = args[0].split('-');
+      var date = myDate[0].split('/');
+      var heure = myDate[1].split(':');
+      const horaire = new Date(date[2], date[1]-1, date[0], heure[0], heure[1]);
 
       if (!message.mentions.channels.first()) return message.channel.send('Tu dois mentionner un salon !')
 
       if (!args[2]) return message.channel.send('Veuillez m\'indiquer le message !')
 
-      const date = args[0]
       const channel = message.mentions.channels.first()
 
       args.shift()
@@ -27,10 +32,11 @@ exports.run = async (_client, message, args) => {
 
       if (!args.join(' ') >= 1950) return message.channel.send('Le message est trop long !')
 
-      connection.query(`INSERT INTO msg_auto (timestamp, channel, message) VALUES (?, ?, ?)`, [moment(date, 'DD/MM/YYYY-hh:mm').format('x'), channel.id, args.join(' ')])
+      const mess = args.join(' ');
 
-      return message.channel.send(`Message correctement programmé pour ${date} dans ${channel}`)
+      connection.query(`INSERT INTO msg_auto (timestamp, channel, message) VALUES (?, ?, ?)`, [horaire.getTime()/1000, channel.id, mess])
 
+      return message.channel.send(`Message correctement programmé pour ${myDate} dans ${channel}`)
 }
 
 exports.help = {
