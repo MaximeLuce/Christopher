@@ -1,12 +1,11 @@
 const { MessageEmbed } = require("discord.js");
-const { perms } = require('../config.json')
 
 exports.run = async (client, message, args) => {
-    if (!perms.includes(message.author.id)) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
+    if (!message.member.hasPermission("KICK_MEMBERS")) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
 
         if(message.mentions.users.size === 0) return message.channel.send("Tu dois mentionner un utilisateur !")
         
-        const reason = args.slice(1).join(' ') || `Aucune raison spécifié !`
+        const reason = args.slice(1).join(' ') || `Aucune raison spécifiée !`
 
         const kick = message.guild.member(message.mentions.users.first())
 
