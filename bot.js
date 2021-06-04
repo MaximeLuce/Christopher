@@ -161,7 +161,7 @@ cron.schedule('* * * * *', () => {
         .setFooter('Nous vous souhaitons une agréable journée !')
         .setTimestamp()
 
-        client.channels.cache.get('522779443232636928').send(bienvenue)
+        client.channels.cache.get('506450346697031710').send(bienvenue)
       });
     }
   );
