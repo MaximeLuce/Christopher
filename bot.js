@@ -1,4 +1,4 @@
-﻿const { Client, Collection, MessageEmbed } = require('discord.js')
+const { Client, Collection, MessageEmbed } = require('discord.js')
 const { readdir } = require('fs')
 const { createConnection } = require('mysql2');
 const cron = require('node-cron')
@@ -67,7 +67,23 @@ cron.schedule('0 6 * * 1', () => {
   timezone: "Europe/Paris"
 })
 
-cron.schedule('0 8 * * *', () => {
+cron.schedule(`* * * * *`, () => {
+    connection.query(`SELECT * FROM msg_auto WHERE timestamp > ? AND timestamp < ?`,
+      [(Date.now()/1000)-30, (Date.now()/1000)+30],
+      function(err, results) {
+        if(err) throw err;
+        if(results[0]){
+          results.forEach(e => { 
+            client.channels.cache.get(e['channel']).send(e['message']);
+            connection.query(`DELETE FROM msg_auto WHERE timestamp = ?`, [e['timestamp']]);
+          });
+        }
+      });
+  }, {
+    timezone: "Europe/Paris"
+})
+
+cron.schedule('* * * * *', () => {
   connection.query(
     `SELECT * FROM birthdays WHERE date = ?`,
     [moment().format("DD/MM")],
@@ -145,7 +161,7 @@ cron.schedule('0 8 * * *', () => {
         .setFooter('Nous vous souhaitons une agréable journée !')
         .setTimestamp()
 
-        client.channels.cache.get('506450346697031710').send(bienvenue)
+        client.channels.cache.get('522779443232636928').send(bienvenue)
       });
     }
   );
