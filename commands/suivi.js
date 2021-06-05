@@ -9,7 +9,7 @@ const connection = createConnection({
     database: config.connexion.database
   });
 
-exports.run = async (_client, message, args) => {
+exports.run = async (client, message, args) => {
     if (!message.member.roles.cache.some(r => r.id == 673268660458094603) && !message.member.hasPermission("ADMINISTRATOR")) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
 
         const time = Math.round(Date.now()/1000);
@@ -61,7 +61,40 @@ exports.run = async (_client, message, args) => {
 
         connection.query(`INSERT INTO modlogs (modo, membre, motif, type, date) VALUES (?, ?, ?, ?, ?)`, [modo, membre, motif, type, time])
 
-        return message.channel.send(`Suivi correctement effectué.`)
+        let affType, affModo, affTime, affMembre
+
+        switch(type){
+            case 1:
+                affType = "Avertissement";
+                break;
+            case 2: 
+                affType = "Mute";
+                break;
+            case 3: 
+                affType = "Kick";
+                break;
+            case 4: 
+                affType = "Ban";
+                break;
+            case 5: 
+                affType = "Suppression";
+                break;
+            default: 
+                affType = motif.split(' ')[0];
+                break;
+        }
+
+        affModo = client.users.resolve(modo);
+
+        affMembre = client.users.resolve(membre);
+
+        const date = new Date(time*1000);
+
+        affTime = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+
+        client.channels.cache.get("800813922872852494").send('['+affType+' - '+affModo.username+'] '+affTime+', '+affMembre.username+' : '+motif);
+
+        return message.channel.send(`Suivi correctement effectué.`);
 }
 
 exports.help = {
