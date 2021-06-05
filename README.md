@@ -10,7 +10,6 @@ Pensez à bien mettre à jour ce fichier à chaque module ajouté/corrigé.
 # Liste des modules à programmer
 <ul>
   <li>Commande de lecture de musique</li>
-  <li>Commande de suivi pour la modération</li>
   <li>Réactions Rôles</li>
   <li>Commande Latex et intégration avec les dollars dans un message</li>
   <li>Statistiques du serveur</li>
