@@ -35,5 +35,5 @@ exports.run = async (_client, message, args) => {
 }
 
 exports.help = {
-  name: 'birthday'
+  name: 'anniversaire'
 }
