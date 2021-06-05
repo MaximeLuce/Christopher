@@ -43,5 +43,5 @@ exports.run = async (client, message, args) => {
     }
     
 exports.help = {
-    name: "expulser"
+    name: "kick"
 }
