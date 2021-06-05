@@ -1,12 +1,24 @@
 const { MessageEmbed } = require("discord.js");
-const { perms } = require('../config.json')
+const { createConnection } = require('mysql2');
+const config = require('../config.json');
+
+const connection = createConnection({
+    host: config.connexion.host,
+    user: config.connexion.user,
+    password: config.connexion.password,
+    database: config.connexion.database
+  });
 
 exports.run = async (client, message, args) => {
     if (!message.member.hasPermission("BAN_MEMBERS")) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
 
         if(!args[0]) return message.channel.send("Tu dois m'indiquer un ID !")
         
-        const reason = args.slice(1).join(' ') || `Aucune raison spécifié !`
+        const reason = args.slice(1).join(' ') || `Aucune raison spécifiée !`
+
+        if(!message.guild.me.hasPermission("BAN_MEMBERS")) {
+            return message.channel.send("Je n'ai pas la permission pour ban !");
+        }
 
         try {
             const ban = await client.users.fetch(args[0])
@@ -22,9 +34,12 @@ exports.run = async (client, message, args) => {
                   .addField('Raison :', reason)
                   .setTimestamp())
             });
+
+            connection.query(`INSERT INTO modlogs (modo, membre, motif, type, date) VALUES (?, ?, ?, ?, ?)`, [message.author.id, ban.user.id, reason, 4, Math.round(Date.now()/1000)])
         } catch {
             return message.channel.send('Cet utilisateur n\'existe pas !')
         }
+
     }
     
 exports.help = {
