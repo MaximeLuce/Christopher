@@ -1,4 +1,13 @@
 const { MessageEmbed } = require("discord.js");
+const { createConnection } = require('mysql2');
+const config = require('../config.json');
+
+const connection = createConnection({
+    host: config.connexion.host,
+    user: config.connexion.user,
+    password: config.connexion.password,
+    database: config.connexion.database
+  });
 
 exports.run = async (client, message, args) => {
     if (!message.member.hasPermission("KICK_MEMBERS")) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
@@ -40,6 +49,8 @@ exports.run = async (client, message, args) => {
               .addField('Raison :', reason)
               .setTimestamp())
         });
+
+        connection.query(`INSERT INTO modlogs (modo, membre, motif, type, date) VALUES (?, ?, ?, ?, ?)`, [message.author.id, kick.user.id, reason, 3, Math.round(Date.now()/1000)])
     }
     
 exports.help = {
