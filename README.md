@@ -18,6 +18,5 @@ Pensez à bien mettre à jour ce fichier à chaque module ajouté/corrigé.
 
 # Liste des bogues à corriger
 <ul>
-  <li>Commande pour faire rejoindre un salon vocal à Christopher</li>
   <li>Démineur</li>
 </ul>
