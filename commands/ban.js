@@ -42,6 +42,11 @@ exports.run = async (client, message, args) => {
         ban.ban({ reason: reason }).then(member => {
             message.channel.send(`**${member.user.tag}** a été banni par **${message.author.tag}** pour **${reason}**`)
 
+            const date = new Date(time*1000);
+            affTime = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+
+            client.channels.cache.get("724669164072993063").send('**[Ban - <@'+message.author.id+'>]** '+affTime+', <@'+member.user.id+'> : '+reason);
+
             client.channels.cache.get('745938396328755220').send(new MessageEmbed()
               .setColor('#3867d6')
               .setTitle("BAN !")
