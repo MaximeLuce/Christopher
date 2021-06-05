@@ -3,6 +3,8 @@ exports.run = (client, message, args) => {
 
 	if(!args[0]){
 		chan = message.member.voice.channel;
+	} else {
+		chan = client.channels.resolve(args[0]);
 	}
 
 	if(!chan || chan.type != 'voice') return message.channel.send("Vous devez être dans un salon vocal.");
