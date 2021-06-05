@@ -10,7 +10,7 @@ const connection = createConnection({
   });
 
 exports.run = async (_client, message, args) => {
-    if (!config.perms.includes(message.author.id)) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
+    if (!message.member.roles.cache.some(r => r.id == 673268660458094603) && !message.member.hasPermission("ADMINISTRATOR")) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
 
     if (!args[0]) return message.channel.send('Il faut indiquer une date !')
 
