@@ -14,8 +14,6 @@ Pensez à bien mettre à jour ce fichier à chaque module ajouté/corrigé.
   <li>Réactions Rôles</li>
   <li>Commande Latex et intégration avec les dollars dans un message</li>
   <li>Statistiques du serveur</li>
-  <li>Rappel programmable (pour les Gardiens et Sages)</li>
-  <li>Envoi d'un message avec Christopher</li>
   <li>Supprimer les entrées relatives à un membre qui part</li>
 </ul>
 
