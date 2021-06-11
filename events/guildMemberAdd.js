@@ -1,4 +1,14 @@
 const { MessageEmbed } = require('discord.js')
+const { createConnection } = require('mysql2');
+const config = require('../config.json')
+const moment = require("date")
+
+const connection = createConnection({
+    host: config.connexion.host,
+    user: config.connexion.user,
+    password: config.connexion.password,
+    database: config.connexion.database
+  });
 
 module.exports = (client, member) => {
   if(member.guild.id !== '506449018885242890') return
@@ -34,6 +44,16 @@ module.exports = (client, member) => {
     "Nov": "Novembre",
     "Dec": "Décembre"
   }
+
+  let time = new Date().getTime();
+  time = Math.round(time/1000);
+  time = time + 1296000;
+
+  connection.query(`INSERT INTO pub (idm, time) VALUES (?, ?)`, [member.user.id, time]);
+    message.channel.createOverwrite(message.author, {
+      SEND_MESSAGES: false
+    })
+      .catch(console.error);
 
   const welcomeLog = new MessageEmbed()
       .setTitle('**Arrivée !**')
