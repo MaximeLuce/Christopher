@@ -16,7 +16,7 @@ exports.run = async (client, message, args) => {
         mute.roles.remove('732136692085030912').then(member => {
             message.channel.send(`**${member.user.tag}** a été unmute par **${message.author.tag}**`)
             
-            client.channels.cache.get('745938396328755220').send(new MessageEmbed()
+            client.channels.cache.get('835593178064486470').send(new MessageEmbed()
               .setColor('#3867d6')
               .setTitle("Unmute !")
               .addField('User :', member.user.tag)
