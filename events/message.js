@@ -2,16 +2,37 @@ const hello1 = require('../assets/hello1.json')
 const hello2 = require('../assets/hello2.json')
 const hello3 = require('../assets/hello3.json')
 const grossier = require('../assets/grossier.json')
+const { createConnection } = require('mysql2');
+const config = require('../config.json')
+const moment = require("date")
+
+const connection = createConnection({
+    host: config.connexion.host,
+    user: config.connexion.user,
+    password: config.connexion.password,
+    database: config.connexion.database
+  });
 
 module.exports = (client, message) => {
   const prefix = '&'
+  let time = new Date().getTime();
+  time = Math.round(time/1000);
+  time = time + 1296000;
 
   if (message.author.bot) return
   if (message.channel.type === 'dm') return
   if (message.attachments.size !== 0) return
 
-  const words = ['bonjour', 'salut', 'coucou', 'hey', 'hi', 'hello', 'yo', 'bonsoir', 'bonjour.']
-  if (words.includes(message.content.toLowerCase().replace('!', ''))) {
+  if(message.channel.id == 589924311557472332){
+    connection.query(`INSERT INTO pub (idm, time) VALUES (?, ?)`, [message.author.id, time]);
+    message.channel.createOverwrite(message.author, {
+      SEND_MESSAGES: false
+    })
+      .catch(console.error);
+  }
+
+  const words = ['bonjour', 'salut', 'coucou', 'hey', 'hi', 'hello', 'yo', 'bonsoir']
+  if (words.includes(message.content.toLowerCase().replace(/([!,.?:])+/, ''))) {
     const helloMessage1 = hello1[Math.floor(Math.random() * hello1.length)]
     message.channel.send(helloMessage1)
     const collector = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 15000, max: 1 })
