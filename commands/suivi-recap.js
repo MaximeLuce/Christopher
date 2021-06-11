@@ -32,7 +32,12 @@ exports.run = async (client, message, args) => {
                             affModo = client.users.resolve(e.modo);
                             affMembre = client.users.resolve(e.membre);
                             const date = new Date(e.date*1000);
-                            affTime = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+                            let jour = ("0" + date.getDate()).slice(-2);
+                            let mois = ("0" + (date.getMonth() + 1)).slice(-2);
+                            let heure = ("0" + date.getHours()).slice(-2);
+                            let minute = ("0" + date.getMinutes()).slice(-2);
+                            let secondes = ("0" + date.getSeconds()).slice(-2);
+                            affTime = jour+'/'+mois+'/'+date.getFullYear()+' '+heure+':'+minute+':'+secondes;
                             if(affModo.id && affMembre.id){
                                 message.channel.send('**['+affType+' - <@'+affModo.id+'>]** '+affTime+', <@'+affMembre.id+'> : '+e.motif);
                             }
@@ -55,7 +60,12 @@ exports.run = async (client, message, args) => {
                             affModo = client.users.resolve(e.modo);
                             affMembre = client.users.resolve(e.membre);
                             const date = new Date(e.date*1000);
-                            affTime = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+                            let jour = ("0" + date.getDate()).slice(-2);
+                            let mois = ("0" + (date.getMonth() + 1)).slice(-2);
+                            let heure = ("0" + date.getHours()).slice(-2);
+                            let minute = ("0" + date.getMinutes()).slice(-2);
+                            let secondes = ("0" + date.getSeconds()).slice(-2);
+                            affTime = jour+'/'+mois+'/'+date.getFullYear()+' '+heure+':'+minute+':'+secondes;
                             if(affModo.id && affMembre.id){
                                 message.channel.send('**['+affType+' - <@'+affModo.id+'>]** '+affTime+', <@'+affMembre.id+'> : '+e.motif);
                             }
@@ -82,7 +92,12 @@ exports.run = async (client, message, args) => {
                             affModo = client.users.resolve(e.modo);
                             affMembre = client.users.resolve(e.membre);
                             const date = new Date(e.date*1000);
-                            affTime = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+                            let jour = ("0" + date.getDate()).slice(-2);
+                            let mois = ("0" + (date.getMonth() + 1)).slice(-2);
+                            let heure = ("0" + date.getHours()).slice(-2);
+                            let minute = ("0" + date.getMinutes()).slice(-2);
+                            let secondes = ("0" + date.getSeconds()).slice(-2);
+                            affTime = jour+'/'+mois+'/'+date.getFullYear()+' '+heure+':'+minute+':'+secondes;
                             if(affModo.id && affMembre.id){
                                 message.channel.send('**['+affType+' - <@'+affModo.id+'>]** '+affTime+', <@'+affMembre.id+'> : '+e.motif);
                             }
