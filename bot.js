@@ -3,7 +3,7 @@ const { readdir } = require('fs')
 const { createConnection } = require('mysql2');
 const cron = require('node-cron')
 const weather = require('weather-js');
-const config = require('./config.json')
+const config = require('./config.json');
 const ephemeride = require('./assets/ephemeride.json');
 const moment = require('moment');
 const date = require('date');
@@ -25,31 +25,50 @@ const connection = createConnection({
   password: config.connexion.password,
   database: config.connexion.database
 });
+
+connection.connect(function(err){
+  if(err) throw err;
+  console.log("Connecté à la base de données.")
+});
+
 const quote = require('./assets/quote.json')
 
 readdir('./events/', (err, files) => {
-  if (err) console.log(err)
+  if (err) throw err;
 
   for (const f of files.filter(f => f.endsWith('.js'))) {
     const event = require(`./events/${f}`)
     client.on(f.split('.')[0], event.bind(null, client))
     delete require.cache[require.resolve(`./events/${f}`)]
   }
-  console.log(`[Event] Chargement de ${files.length} events`)
+  console.log(`[Events] Chargement de ${files.length} events`)
 })
 
 readdir('./commands/', (err, files) => {
-  if (err) console.log(err)
+  if (err) throw err;
   for (const command of files.filter(f => f.endsWith('.js'))) {
     const props = require(`./commands/${command}`)
     client.commands.set(props.help.name, props)
-    console.log(`${command} chargé`)
+    console.log(`-> ${command} chargé`)
   }
 })
 
 cron.schedule('0 0 * * *', () => {
   const quoteRandom = quote[Math.floor(Math.random() * quote.length)]
-  client.channels.cache.get('547864791855792139').send(`__**La citation du jour :**__ \n \n *${quoteRandom}*`)
+  client.channels.cache.get('547864791855792139').send(`__**La citation du jour :**__ \n \n *${quoteRandom}*`);
+  let time = Date.now();
+  time = Math.round(time/1000);
+  connection.query(`SELECT * FROM pub WHERE time < ?`, 
+    [time],
+    function(err, results){
+      if(err) throw err;
+      if(results[0]){
+        results.forEach(e => {
+          client.channels.cache.get('589924311557472332').permissionOverwrites.get(e['idm']).delete();
+          connection.query(`DELETE FROM pub WHERE time < ?`, [time]);
+        });
+      }
+    });
 }, {
   timezone: "Europe/Paris"
 })
@@ -58,7 +77,7 @@ cron.schedule('0 8 * * 6,0', () => {
 }, {
   timezone: "Europe/Paris"
 })
-cron.schedule('0 9 * * 6,0', () => {
+cron.schedule('0 9 * * 4,0', () => {
   client.channels.cache.get('506450346697031710').send(`Pour soutenir le projet, n'hésitez pas à le suivre sur les différents réseaux sociaux et partager les événements :wink: Tous les liens se trouvent ici : https://le-max-de-culture.fr/link`)
 }, {
   timezone: "Europe/Paris"
@@ -70,19 +89,20 @@ cron.schedule('0 6 * * 1', () => {
 })
 
 cron.schedule(`* * * * *`, () => {
-    connection.query(`SELECT * FROM msg_auto WHERE timestamp > ? AND timestamp < ?`,
-      [(Date.now()/1000)-30, (Date.now()/1000)+30],
-      function(err, results) {
-        if(err) throw err;
-        if(results[0]){
-          results.forEach(e => { 
-            client.channels.cache.get(e['channel']).send(e['message']);
-            connection.query(`DELETE FROM msg_auto WHERE timestamp = ?`, [e['timestamp']]);
-          });
-        }
-      });
-  }, {
-    timezone: "Europe/Paris"
+  const quoteRandom = quote[Math.floor(Math.random() * quote.length)]
+  connection.query(`SELECT * FROM msg_auto WHERE timestamp > ? AND timestamp < ?`,
+    [(Date.now()/1000)-30, (Date.now()/1000)+30],
+    function(err, results) {
+      if(err) throw err;
+      if(results[0]){
+        results.forEach(e => { 
+          client.channels.cache.get(e['channel']).send(e['message']);
+          connection.query(`DELETE FROM msg_auto WHERE timestamp = ?`, [e['timestamp']]);
+        });
+      }
+    });
+}, {
+  timezone: "Europe/Paris"
 })
 
 cron.schedule('0 8 * * *', () => {
@@ -163,7 +183,7 @@ cron.schedule('0 8 * * *', () => {
         .setFooter('Nous vous souhaitons une agréable journée !')
         .setTimestamp()
 
-        client.channels.cache.get('506450346697031710').send(bienvenue)
+        client.channels.cache.get('800813922872852494').send(bienvenue)
       });
     }
   );
