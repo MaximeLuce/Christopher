@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js')
 exports.run = async (_client, message) => {
     const avatarEmbed = new MessageEmbed()
         .setColor('#3867d6')
-        .setTitle('<:lmdc:853372251717107712> Les liens du projet <:lmdc:853372251717107712>')
+        .setTitle('<:lmdc:750836302823293010> Les liens du projet <:lmdc:750836302823293010>')
         .addField('Le Site', `https://le-max-de-culture.fr/`, true)
         .addField('Discord', `https://discord.gg/4VhPeBZ (lien permanent)`, true)
         .addField('Twitter', `https://twitter.com/LeMaxDeCulture`, true)
