@@ -50,7 +50,7 @@ module.exports = (client, member) => {
   time = time + 1296000;
 
   connection.query(`INSERT INTO pub (idm, time) VALUES (?, ?)`, [member.user.id, time]);
-    cleint.channels.cache.get('589924311557472332').createOverwrite(member, {
+    client.channels.cache.get('589924311557472332').createOverwrite(member, {
       SEND_MESSAGES: false
     })
       .catch(console.error);
