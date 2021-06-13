@@ -17,6 +17,3 @@ Pensez à bien mettre à jour ce fichier à chaque module ajouté/corrigé.
 </ul>
 
 # Liste des bogues à corriger
-<ul>
-  <li>Démineur</li>
-</ul>
