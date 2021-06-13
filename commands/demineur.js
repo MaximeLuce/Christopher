@@ -66,6 +66,12 @@ exports.run = async (_client, message, args) => {
   if(args.length === 2 && args[0] == parseInt(args[0]) && args[1] == parseInt(args[1])){
     l = args[0];
     h = args[1];
+    if(l < 4){
+      l = 4;
+    }
+    if(h < 4){
+      h = 4;
+    }
     if(l*h > 99){
       l = 9;
       h = 9;
