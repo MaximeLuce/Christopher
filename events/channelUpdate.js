@@ -59,7 +59,7 @@ module.exports = async (_client, oldChannel, newChannel) => {
               .setAuthor('Logs', 'attachment://camera.png')
               .setTitle(oldChannel.type === 'category' ? 'Catégorie modifiée' : 'Salon modifié')
               .addField(oldChannel.type === 'category' ? 'Catégorie' : 'Salon :', `${newChannel.name} (${newChannel.id})`)
-              .addField('Changement de permissions :', role.type === 'role' ? `Permission ajoutée sur le rôle : ${role.name}` : `Permission ajoutée sur le membre : ${newChannel.guild.members.cache.get(role.id).user.username}`)
+              .addField('Changement de permissions :', role.type === 'role' ? `Permission retirée sur le rôle : ${role.name}` : `Permission ajoutée sur le membre : ${newChannel.guild.members.cache.get(role.id).user.username}`)
               .setTimestamp()
             )
           }
