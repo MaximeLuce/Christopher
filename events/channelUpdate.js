@@ -53,13 +53,13 @@ module.exports = async (_client, oldChannel, newChannel) => {
       if (oldChannel.permissionOverwrites.size > newChannel.permissionOverwrites.size) {
         oldChannel.permissionOverwrites.map(role => {
           if (!newChannel.permissionOverwrites.has(role.id)) {
-            oldChannel.guild.channels.cache.get('835593178064486470').send(new MessageEmbed()
-            .setColor('#3867d6')
-            .attachFiles(['assets/images/camera.png'])
+            newChannel.guild.channels.cache.get('835593178064486470').send(new MessageEmbed()
+              .setColor('#3867d6')
+              .attachFiles(['assets/images/camera.png'])
               .setAuthor('Logs', 'attachment://camera.png')
               .setTitle(oldChannel.type === 'category' ? 'Catégorie modifiée' : 'Salon modifié')
               .addField(oldChannel.type === 'category' ? 'Catégorie' : 'Salon :', `${newChannel.name} (${newChannel.id})`)
-              .addField('Changement de permissions :', `Permission retirée sur le rôle : ${oldChannel.guild.roles.cache.get(role.id).toString()}`)
+              .addField('Changement de permissions :', role.type === 'role' ? `Permission ajoutée sur le rôle : ${role.name}` : `Permission ajoutée sur le membre : ${newChannel.guild.members.cache.get(role.id).user.username}`)
               .setTimestamp()
             )
           }
@@ -69,13 +69,13 @@ module.exports = async (_client, oldChannel, newChannel) => {
       if (oldChannel.permissionOverwrites.size < newChannel.permissionOverwrites.size) {
         newChannel.permissionOverwrites.map(role => {
           if (!oldChannel.permissionOverwrites.has(role.id)) {
-            oldChannel.guild.channels.cache.get('835593178064486470').send(new MessageEmbed()
+            newChannel.guild.channels.cache.get('835593178064486470').send(new MessageEmbed()
               .setColor('#3867d6')
               .attachFiles(['assets/images/camera.png'])
               .setAuthor('Logs', 'attachment://camera.png')
               .setTitle(oldChannel.type === 'category' ? 'Catégorie modifiée' : 'Salon modifié')
               .addField(oldChannel.type === 'category' ? 'Catégorie' : 'Salon :', `${newChannel.name} (${newChannel.id})`)
-              .addField('Changement de permissions :', `Permission ajoutée sur le rôle : ${oldChannel.guild.roles.cache.get(role.id).toString()}`)
+              .addField('Changement de permissions :', role.type === 'role' ? `Permission ajoutée sur le rôle : ${role.name}` : `Permission ajoutée sur le membre : ${oldChannel.guild.members.cache.get(role.id).user.username}`)
               .setTimestamp()
             )
           }
