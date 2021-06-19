@@ -1,7 +1,6 @@
 const { MessageEmbed } = require('discord.js')
 
-module.exports = async (_client, oldState, newState) => {
-    if(role.guild.id !== '506449018885242890') return
+module.exports = (client, oldState, newState) => {
 
     if (!oldState.channel && newState.channel) {
 
@@ -13,24 +12,30 @@ module.exports = async (_client, oldState, newState) => {
             .addField('Utilisateur :', newState.member.user.tag)
             .addField('Salon :', newState.channel)
             .setTimestamp()
-        )
+        );
+
+        newState.guild.channels.cache.get('609794221616136192').createOverwrite(newState.member.user, {
+          VIEW_CHANNEL : true,
+          READ_MESSAGE_HISTORY : true
+        })
       return
 
     } else if (oldState.channel && !newState.channel) {
 
         oldState.guild.channels.cache.get('835593178064486470').send(new MessageEmbed()
             .setColor('#3867d6')
-            .setTitle('Role crée :')
+            .setTitle('Salon vocal quitté')
             .attachFiles(['assets/images/camera.png'])
             .setAuthor('Logs', 'attachment://camera.png')
             .addField('Utilisateur :', oldState.member.user.tag)
             .addField('Salon :', oldState.channel)
             .setTimestamp()
         )
+        client.channels.cache.get('609794221616136192').permissionOverwrites.get(newState.member.user.id).delete();
       return
 
     } else {
         return
     }
-    
+
 }
