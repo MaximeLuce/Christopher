@@ -11,7 +11,7 @@ const date = require('date');
 const client = new Client({
   partials: ['MESSAGE', 'GUILD_MEMBER', 'USER'],
   ws: {
-    intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_PRESENCES', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS']
+    intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_PRESENCES', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_VOICE_STATES']
   }
 })
 
