@@ -14,7 +14,7 @@ exports.run = async (client, message, args) => {
 
         const time = Math.round(Date.now()/1000);
 
-        const modo = message.author.id;
+        const modo = message.author.id.toString();
 
         if (!args[0]) return message.channel.send('Tu dois indiquer l\'id du membre !');
 
@@ -86,9 +86,15 @@ exports.run = async (client, message, args) => {
 
         const date = new Date(time*1000);
 
-        affTime = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+        let jour = ("0" + date.getDate()).slice(-2);
+        let mois = ("0" + (date.getMonth() + 1)).slice(-2);
+        let heure = ("0" + date.getHours()).slice(-2);
+        let minute = ("0" + date.getMinutes()).slice(-2);
+        let secondes = ("0" + date.getSeconds()).slice(-2);
 
-        client.channels.cache.get("724669164072993063").send('**['+affType+' - <@'+modo+'>]** '+affTime+', <@'+membre+'> : '+motif)
+        affTime = jour+'/'+mois+'/'+date.getFullYear()+' '+heure+':'+minute+':'+secondes;
+
+        client.channels.cache.get("724669164072993063").send('**['+affType+' - <@'+modo+'>]** '+affTime+', <@'+membre+'> : '+motif);
 
         return message.channel.send(`Suivi correctement effectué.`);
 }
