@@ -61,7 +61,7 @@ exports.run = async (client, message, args) => {
 
         connection.query(`INSERT INTO modlogs (modo, membre, motif, type, date) VALUES (?, ?, ?, ?, ?)`, [modo, membre, motif, type, time])
 
-        let affType, affModo, affTime, affMembre
+        let affType, affTime
 
         switch(type){
             case 1:
@@ -84,15 +84,11 @@ exports.run = async (client, message, args) => {
                 break;
         }
 
-        affModo = client.users.resolve(modo);
-
-        affMembre = client.users.resolve(membre);
-
         const date = new Date(time*1000);
 
         affTime = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
 
-        client.channels.cache.get("724669164072993063").send('**['+affType+' - <@'+affModo.id+'>]** '+affTime+', <@'+affMembre.id+'> : '+motif)
+        client.channels.cache.get("724669164072993063").send('**['+affType+' - <@'+modo.id+'>]** '+affTime+', <@'+membre.id+'> : '+motif)
 
         return message.channel.send(`Suivi correctement effectué.`);
 }
