@@ -29,8 +29,6 @@ exports.run = async (client, message, args) => {
                         results.forEach(e => {
                             affType = tab[e.type];
                             affType = affType[0].toUpperCase()+affType.slice(1);
-                            affModo = client.users.resolve(e.modo);
-                            affMembre = client.users.resolve(e.membre);
                             const date = new Date(e.date*1000);
                             let jour = ("0" + date.getDate()).slice(-2);
                             let mois = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -38,9 +36,7 @@ exports.run = async (client, message, args) => {
                             let minute = ("0" + date.getMinutes()).slice(-2);
                             let secondes = ("0" + date.getSeconds()).slice(-2);
                             affTime = jour+'/'+mois+'/'+date.getFullYear()+' '+heure+':'+minute+':'+secondes;
-                            if(affModo.id && affMembre.id){
-                                message.channel.send('**['+affType+' - <@'+affModo.id+'>]** '+affTime+', <@'+affMembre.id+'> : '+e.motif);
-                            }
+                            message.channel.send('**['+affType+' - <@'+e.modo+'>]** '+affTime+', <@'+e.membre+'> : '+e.motif);
                         })
                         
                     }
@@ -57,8 +53,6 @@ exports.run = async (client, message, args) => {
                         results.forEach(e => {
                             affType = tab[e.type];
                             affType = affType[0].toUpperCase()+affType.slice(1);
-                            affModo = client.users.resolve(e.modo);
-                            affMembre = client.users.resolve(e.membre);
                             const date = new Date(e.date*1000);
                             let jour = ("0" + date.getDate()).slice(-2);
                             let mois = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -66,9 +60,7 @@ exports.run = async (client, message, args) => {
                             let minute = ("0" + date.getMinutes()).slice(-2);
                             let secondes = ("0" + date.getSeconds()).slice(-2);
                             affTime = jour+'/'+mois+'/'+date.getFullYear()+' '+heure+':'+minute+':'+secondes;
-                            if(affModo.id && affMembre.id){
-                                message.channel.send('**['+affType+' - <@'+affModo.id+'>]** '+affTime+', <@'+affMembre.id+'> : '+e.motif);
-                            }
+                            message.channel.send('**['+affType+' - <@'+e.modo+'>]** '+affTime+', <@'+e.membre+'> : '+e.motif);
                         })
                         
                     }
@@ -89,8 +81,6 @@ exports.run = async (client, message, args) => {
                         results.forEach(e => {
                             affType = tab[e.type];
                             affType = affType[0].toUpperCase()+affType.slice(1);
-                            affModo = client.users.resolve(e.modo);
-                            affMembre = client.users.resolve(e.membre);
                             const date = new Date(e.date*1000);
                             let jour = ("0" + date.getDate()).slice(-2);
                             let mois = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -98,9 +88,7 @@ exports.run = async (client, message, args) => {
                             let minute = ("0" + date.getMinutes()).slice(-2);
                             let secondes = ("0" + date.getSeconds()).slice(-2);
                             affTime = jour+'/'+mois+'/'+date.getFullYear()+' '+heure+':'+minute+':'+secondes;
-                            if(affModo.id && affMembre.id){
-                                message.channel.send('**['+affType+' - <@'+affModo.id+'>]** '+affTime+', <@'+affMembre.id+'> : '+e.motif);
-                            }
+                            message.channel.send('**['+affType+' - <@'+e.modo+'>]** '+affTime+', <@'+e.membre+'> : '+e.motif);
                         })
                         
                     }
