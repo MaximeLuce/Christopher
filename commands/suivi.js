@@ -88,7 +88,7 @@ exports.run = async (client, message, args) => {
 
         affTime = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
 
-        client.channels.cache.get("724669164072993063").send('**['+affType+' - <@'+modo.id+'>]** '+affTime+', <@'+membre.id+'> : '+motif)
+        client.channels.cache.get("724669164072993063").send('**['+affType+' - <@'+modo+'>]** '+affTime+', <@'+membre+'> : '+motif)
 
         return message.channel.send(`Suivi correctement effectué.`);
 }
