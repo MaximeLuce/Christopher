@@ -13,7 +13,7 @@ const connection = createConnection({
 
 exports.run = async (_client, message) => {
     try {
-      const res = await fetch('https://angeltears.fr/api/grotte/get_question.php?TK=2c07d18b8b2aedbe831927276a87a839cb56aeef68b8cf62d60af3c1fb282595')
+      const res = await fetch('https://angeltears.fr/api/grotte/get_question.php?TK=token')
       const body = await res.json()
 
       if (!body.valid) return message.channel.send('Une erreur est survenue. Merci de réessayer ultérieurement')
