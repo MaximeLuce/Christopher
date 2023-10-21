@@ -1,105 +1,110 @@
-const { MessageEmbed } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
+const constantes = require('../assets/constantes.json');
+const aff_horaire = new Date();
 
 module.exports = async (_client, oldChannel, newChannel) => {
-    if(oldChannel.guild.id !== '506449018885242890') return
+    // if(oldChannel.guild.id !== '506449018885242890') return
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
       .setColor('#3867d6')
-      .attachFiles(['assets/images/camera.png'])
-      .setAuthor('Logs', 'attachment://camera.png')
+      .setAuthor({name: 'Logs', iconURL: 'attachment://camera.png'})
       .setTitle(oldChannel.type === 'category' ? 'Catégorie modifiée' : 'Salon modifié')
-      .addField(oldChannel.type === 'category' ? 'Catégorie' : 'Salon :', `${newChannel.name} (${newChannel.id})`)
+      .addFields({name: oldChannel.type === 'category' ? 'Catégorie' : 'Salon :', value: `${newChannel.name} (${newChannel.id})`})
       .setTimestamp()
 
     if (oldChannel.name !== newChannel.name) {
-      embed.addField('Changement de nom :', `Nom avant : **${oldChannel.name}** \nNom après : **${newChannel.name}**`)
+      embed.addFields({name: 'Changement de nom :', value: `Nom avant : **${oldChannel.name}** \nNom après : **${newChannel.name}**`})
     }
 
     if (oldChannel.parent !== newChannel.parent) {
-      embed.addField('Changement de catégorie :', `Catégorie avant : **${oldChannel.parent}** \nCatégorie après **${newChannel.parent}**`)
+      embed.addFields({name: 'Changement de catégorie :', value: `Catégorie avant : **${oldChannel.parent}** \nCatégorie après **${newChannel.parent}**`})
     }
 
     if (oldChannel.bitrate !== newChannel.bitrate) {
-      embed.addField('Changement de bitrate :', `Bitrate avant : **${oldChannel.bitrate / 1000} kbps** \nBitrate après : **${newChannel.bitrate / 1000} kbps**`)
+      embed.addFields({name: 'Changement de bitrate :', value: `Bitrate avant : **${oldChannel.bitrate / 1000} kbps** \nBitrate après : **${newChannel.bitrate / 1000} kbps**`})
     }
 
     if (oldChannel.userLimit !== newChannel.userLimit) {
-      embed.addField('Changement de limite de personne :', `Limite avant : **${oldChannel.userLimit === 0 ? 'Aucune limite' : oldChannel.userLimit}** \nLimite après : **${newChannel.userLimit === 0 ? 'Aucune limite' : newChannel.userLimit}**`)
+      embed.addFields({name: 'Changement de limite de personne :', value: `Limite avant : **${oldChannel.userLimit === 0 ? 'Aucune limite' : oldChannel.userLimit}** \nLimite après : **${newChannel.userLimit === 0 ? 'Aucune limite' : newChannel.userLimit}**`})
     }
 
     if (oldChannel.rateLimitPerUser !== newChannel.rateLimitPerUser) {
-      embed.addField('Changement du slowmode', `Slowmode avant : **${oldChannel.rateLimitPerUser === 0 ? 'Pas de slowmode' : this.client.functions.getDuration(oldChannel.rateLimitPerUser * 1000)}** \nSlowmode après **${newChannel.rateLimitPerUser === 0 ? 'Aucun slowmode' : this.client.functions.getDuration(newChannel.rateLimitPerUser * 1000)}**`)
+      embed.addFields({name: 'Changement du slowmode', value: `Slowmode avant : **${oldChannel.rateLimitPerUser === 0 ? 'Pas de slowmode' : this.client.functions.getDuration(oldChannel.rateLimitPerUser * 1000)}** \nSlowmode après **${newChannel.rateLimitPerUser === 0 ? 'Aucun slowmode' : this.client.functions.getDuration(newChannel.rateLimitPerUser * 1000)}**`})
     }
 
     if (oldChannel.nsfw !== newChannel.nsfw) {
-      embed.addField('NSFW :', newChannel.nsfw ? 'Activé' : 'Désactivé')
+      embed.addFields({name: 'NSFW :', value: newChannel.nsfw ? 'Activé' : 'Désactivé'})
     }
 
     if (oldChannel.topic !== newChannel.topic) {
       if (oldChannel.topic.length + newChannel.topic.length < 900) {
-        embed.addField('Changement du sujet :', `Ancien sujet \n${oldChannel.topic ? oldChannel.topic : 'Aucun topic'} \n\nNouveau sujet : \n${newChannel.topic ? newChannel.topic : 'Aucun topic'}`)
+        embed.addFields({name: 'Changement du sujet :', value: `Ancien sujet \n${oldChannel.topic ? oldChannel.topic : 'Aucun topic'} \n\nNouveau sujet : \n${newChannel.topic ? newChannel.topic : 'Aucun topic'}`})
       } else {
         embed.attachFiles([{ name: 'Topic_channelUpdate.txt', attachment: Buffer.from(`Ancien sujet : \n${oldChannel.topic ? oldChannel.topic : 'Aucun topic'} \n\nNouveau sujet : \n${newChannel.topic ? newChannel.topic : 'Aucun topic'}`, 'utf8') }])
-        embed.addField('Changement du sujet :', 'Voir fichier')
+        embed.addFields({name: 'Changement du sujet :', value: 'Voir fichier'})
       }
     }
 
     if (embed.fields.length > 1) {
-      oldChannel.guild.channels.cache.get('835593178064486470').send(embed)
-      return
+      return oldChannel.guild.channels.cache.get(constantes["logs_chris"]).send({embeds: [embed], files: ['assets/images/camera.png']})
     }
 
     if (oldChannel.permissionOverwrites !== newChannel.permissionOverwrites) {
       if (oldChannel.permissionOverwrites.size > newChannel.permissionOverwrites.size) {
-        oldChannel.permissionOverwrites.map(role => {
-          if (!newChannel.permissionOverwrites.has(role.id)) {
-            newChannel.guild.channels.cache.get('835593178064486470').send(new MessageEmbed()
+        oldChannel.permissionOverwrites.cache.map(role => {
+          if (!newChannel.permissionOverwrites.cache.has(role.id)) {
+            const embed = new EmbedBuilder()
               .setColor('#3867d6')
-              .attachFiles(['assets/images/camera.png'])
-              .setAuthor('Logs', 'attachment://camera.png')
+              .setAuthor({name: 'Logs', iconURL: 'attachment://camera.png'})
               .setTitle(oldChannel.type === 'category' ? 'Catégorie modifiée' : 'Salon modifié')
-              .addField(oldChannel.type === 'category' ? 'Catégorie' : 'Salon :', `${newChannel.name} (${newChannel.id})`)
-              .addField('Changement de permissions :', role.type === 'role' ? `Permission retirée sur le rôle : ${role.name}` : `Permission retirée sur le membre : ${newChannel.guild.members.cache.get(role.id).user.username}`)
+              .addFields({name: oldChannel.type === 'category' ? 'Catégorie' : 'Salon :', value: `${newChannel.name} (${newChannel.id})`})
+              .addFields({name: 'Changement de permissions :', value: role.type === 'role' ? `Permission retirée sur le rôle : ${role.name}` : `Permission retirée sur le membre : ${newChannel.guild.members.cache.get(role.id).user.username}`})
               .setTimestamp()
-            )
+
+            newChannel.guild.channels.cache.get(constantes["logs_chris"]).send({embeds: [embed], files: ['assets/images/camera.png']})
           }
         })
         return
       }
       if (oldChannel.permissionOverwrites.size < newChannel.permissionOverwrites.size) {
-        newChannel.permissionOverwrites.map(role => {
-          if (!oldChannel.permissionOverwrites.has(role.id)) {
-            newChannel.guild.channels.cache.get('835593178064486470').send(new MessageEmbed()
+        newChannel.permissionOverwrites.cache.map(role => {
+          if (!oldChannel.permissionOverwrites.cache.has(role.id)) {
+            const embed = new EmbedBuilder()
               .setColor('#3867d6')
-              .attachFiles(['assets/images/camera.png'])
-              .setAuthor('Logs', 'attachment://camera.png')
+              .setAuthor({name: 'Logs', iconURL: 'attachment://camera.png'})
               .setTitle(oldChannel.type === 'category' ? 'Catégorie modifiée' : 'Salon modifié')
-              .addField(oldChannel.type === 'category' ? 'Catégorie' : 'Salon :', `${newChannel.name} (${newChannel.id})`)
-              .addField('Changement de permissions :', role.type === 'role' ? `Permission ajoutée sur le rôle : ${role.name}` : `Permission ajoutée sur le membre : ${oldChannel.guild.members.cache.get(role.id).user.username}`)
+              .addFields({name: oldChannel.type === 'category' ? 'Catégorie' : 'Salon :', value: `${newChannel.name} (${newChannel.id})`})
+              .addFields({name: 'Changement de permissions :', value: role.type === 'role' ? `Permission ajoutée sur le rôle : ${role.name}` : `Permission ajoutée sur le membre : ${oldChannel.guild.members.cache.get(role.id).user.username}`})
               .setTimestamp()
-            )
+
+            newChannel.guild.channels.cache.get(constantes["logs_chris"]).send({embeds: [embed], files: ['assets/images/camera.png']})
           }
         })
         return
       }
 
       if (oldChannel.permissionOverwrites.size === newChannel.permissionOverwrites.size) {
-        newChannel.permissionOverwrites.map(role => {
-          if (role !== oldChannel.permissionOverwrites.get(role.id)) {
-            const embed = new MessageEmbed()
+        newChannel.permissionOverwrites.cache.map(role => {
+          if (role !== oldChannel.permissionOverwrites.cache.get(role.id)) {
+            const embed = new EmbedBuilder()
               .setColor('#3867d6')
-              .attachFiles(['assets/images/camera.png'])
-              .setAuthor('Logs', 'attachment://camera.png')
+              .setAuthor({name: 'Logs', iconURL: 'attachment://camera.png'})
               .setTitle(oldChannel.type === 'category' ? 'Catégorie modifiée' : 'Salon modifié')
-              .addField(oldChannel.type === 'category' ? 'Catégorie' : 'Salon :', `${newChannel.name} (${newChannel.id})`)
+              .addFields({name: oldChannel.type === 'category' ? 'Catégorie' : 'Salon :', value: `${newChannel.name} (${newChannel.id})`})
               .setTimestamp()
 
             const allow = []
             const neutral = []
             const deny = []
 
-            const permOldRoleAllow = Object.entries(oldChannel.permissionOverwrites.get(role.id).allow.serialize())
-            const permOldRoleDeny = oldChannel.permissionOverwrites.get(role.id).deny.serialize()
+
+            if(oldChannel.permissionOverwrites.cache.get(role.id)){
+              var permOldRoleAllow = Object.entries(oldChannel.permissionOverwrites.cache.get(role.id).allow.serialize())
+              var permOldRoleDeny = oldChannel.permissionOverwrites.cache.get(role.id).deny.serialize()
+            } else{ 
+              var permOldRoleAllow = []
+              var permOldRoleDeny = []
+            }
 
             const permNewRoleAllow = role.allow.serialize()
             const permNewRoleDeny = role.deny.serialize()
@@ -117,17 +122,17 @@ module.exports = async (_client, oldChannel, newChannel) => {
             }
 
             if (allow.length) {
-              embed.addField('Permission(s) accordée(s) :', allow.map(flag => `\`${flag}\``).join(' \n'))
+              embed.addFields({name: 'Permission(s) accordée(s) :', value: allow.map(flag => `\`${flag}\``).join(' \n')})
             }
             if (neutral.length) {
-              embed.addField('Permission(s) neutralisée(s) :', neutral.map(flag => `\`${flag}\``).join(' \n'))
+              embed.addFields({name: 'Permission(s) neutralisée(s) :', value: neutral.map(flag => `\`${flag}\``).join(' \n')})
             }
             if (deny.length) {
-              embed.addField('Permission(s) refusée(s) :', deny.map(flag => `\`${flag}\``).join(' \n'))
+              embed.addFields({name: 'Permission(s) refusée(s) :', value: deny.map(flag => `\`${flag}\``).join(' \n')})
             }
 
             if (embed.fields.length > 1) {
-              oldChannel.guild.channels.cache.get('835593178064486470').send(embed)
+              oldChannel.guild.channels.cache.get(constantes["logs_chris"]).send({embeds: [embed], files: ['assets/images/camera.png']})
             }
           }
         })

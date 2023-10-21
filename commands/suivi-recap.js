@@ -1,16 +1,20 @@
+const { Permissions } = require('discord.js');
 const { createConnection } = require('mysql2');
 const config = require('../config.json')
 const moment = require("date")
+const constantes = require('../assets/constantes.json');
+const fs = require('fs')
+const aff_horaire = new Date();
+const log = './log.txt';
 
-const connection = createConnection({
-    host: config.connexion.host,
-    user: config.connexion.user,
-    password: config.connexion.password,
-    database: config.connexion.database
-  });
+module.exports = {
+    name: 'suivi-recap',
+    aliases: ['suivi-r'],
+    description: 'Utilisation : &suivi-recap date/type/identifiant | Affiche un récapitulatif des actes de modération d\'un même type, vers une même personne ou d\'une même date au format JJ/MM/AAAA.',
+    execute: async (client, message, args) => {
+        const connection = []
 
-exports.run = async (client, message, args) => {
-    if (!message.member.roles.cache.some(r => r.id == 673268660458094603) && !message.member.hasPermission("ADMINISTRATOR")) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
+        if (!message.member.roles.cache.has(constantes['sentinelle'])) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
 
         if (!args[0]) return message.channel.send('Il va me falloir un paramètre : date (jj/mm/aaaa), id de membre ou type de sanction !');
 
@@ -18,13 +22,30 @@ exports.run = async (client, message, args) => {
 
         let tab = ["autre", "avertissement", "mute", "kick", "ban", "suppression"];
 
+
         if(parseInt(arg, 10) == arg){
-            connection.query(
-                `SELECT * FROM modlogs WHERE membre = ?`,
+            connection.push(createConnection({
+                host: config.connexion.host,
+                user: config.connexion.user,
+                password: config.connexion.password,
+                database: config.connexion.database
+              }));
+            connection[0].query(
+                `SELECT * FROM commun_suivi WHERE membre = ?`,
                 [arg],
                 async function(err, results) {
+                    if(err){
+                        fs.appendFile(`${log}`, `${aff_horaire} — ${err}\n`, (err) => {
+                            if(err) throw err;
+                        });
+                    }
                     if(results.length === 0){
-                        message.channel.send('Aucun résultat.');
+                        message.channel.send('Aucun résultat.')
+                          .catch(function(err) {
+                            fs.appendFile(`${log}`, `${aff_horaire} — ${err}\n`, (err) => {
+                              if(err) throw err;
+                            });
+                          });
                     } else {
                         results.forEach(e => {
                             affType = tab[e.type];
@@ -38,15 +59,32 @@ exports.run = async (client, message, args) => {
                             affTime = jour+'/'+mois+'/'+date.getFullYear()+' '+heure+':'+minute+':'+secondes;
                             message.channel.send('**['+affType+' - <@'+e.modo+'>]** '+affTime+', <@'+e.membre+'> : '+e.motif);
                         })
-                        
+                          .catch(function(err) {
+                            fs.appendFile(`${log}`, `${aff_horaire} — ${err}\n`, (err) => {
+                              if(err) throw err;
+                            });
+                          })
                     }
                 }
             )
+            connection[0].end()
+            connection.shift()
         } else if(tab.includes(arg)) {
-            connection.query(
-                `SELECT * FROM modlogs WHERE type = ?`, 
+            connection.push(createConnection({
+                host: config.connexion.host,
+                user: config.connexion.user,
+                password: config.connexion.password,
+                database: config.connexion.database
+              }));
+            connection[0].query(
+                `SELECT * FROM commun_suivi WHERE type = ?`, 
                 [tab.indexOf(arg)],
                 async function(err, results) {
+                    if(err){
+                        fs.appendFile(`${log}`, `${aff_horaire} — ${err}\n`, (err) => {
+                            if(err) throw err;
+                        });
+                    }
                     if(results.length === 0){
                         message.channel.send('Aucun résultat.');
                     } else {
@@ -62,20 +100,37 @@ exports.run = async (client, message, args) => {
                             affTime = jour+'/'+mois+'/'+date.getFullYear()+' '+heure+':'+minute+':'+secondes;
                             message.channel.send('**['+affType+' - <@'+e.modo+'>]** '+affTime+', <@'+e.membre+'> : '+e.motif);
                         })
-                        
+                          .catch(function(err) {
+                            fs.appendFile(`${log}`, `${aff_horaire} — ${err}\n`, (err) => {
+                              if(err) throw err;
+                            });
+                          })                        
                     }
                 }
             )
+            connection[0].end()
+            connection.shift();
         } else {
             let myDate = arg.split('/');
             let myTime = new Date(myDate[2], myDate[1] - 1, myDate[0]).getTime();
             let mintime = Math.round(myTime/1000);
             let maxtime = mintime+86400;
-            connection.query(
-                `SELECT * FROM modlogs WHERE date < ? AND date > ?`,
+            connection.push(createConnection({
+                host: config.connexion.host,
+                user: config.connexion.user,
+                password: config.connexion.password,
+                database: config.connexion.database
+              }));
+            connection[0].query(
+                `SELECT * FROM commun_suivi WHERE date < ? AND date > ?`,
                 [maxtime, mintime],
                 async function(err, results) {
-                    if(results.length === 0){
+                    if(err){
+                        fs.appendFile(`${log}`, `${aff_horaire} — ${err}\n`, (err) => {
+                            if(err) throw err;
+                        });
+                    }
+                    if(!results || results.length === 0){
                         message.channel.send('Aucun résultat.');
                     } else {
                         results.forEach(e => {
@@ -90,13 +145,16 @@ exports.run = async (client, message, args) => {
                             affTime = jour+'/'+mois+'/'+date.getFullYear()+' '+heure+':'+minute+':'+secondes;
                             message.channel.send('**['+affType+' - <@'+e.modo+'>]** '+affTime+', <@'+e.membre+'> : '+e.motif);
                         })
-                        
+                          .catch(function(err) {
+                            fs.appendFile(`${log}`, `${aff_horaire} — ${err}\n`, (err) => {
+                              if(err) throw err;
+                            });
+                          })
                     }
                 }
             )
+            connection[0].end()
+            connection.shift();
         } 
-}
-
-exports.help = {
-  name: 'suivi-recap'
+    }
 }

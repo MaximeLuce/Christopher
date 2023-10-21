@@ -1,18 +1,18 @@
-const { MessageEmbed } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
+const constantes = require('../assets/constantes.json');
+const aff_horaire = new Date();
 
 module.exports = async (_client, guildEmoji) => {
     if(guildEmoji.guild.id !== '506449018885242890') return
 
-    guildEmoji.guild.channels.cache.get('835593178064486470').send(new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor('#3867d6')
       .setTitle('Emoji supprimé')
-      .attachFiles(['assets/images/camera.png'])
-      .setAuthor('Logs', 'attachment://camera.png')
+      .setAuthor({name: 'Logs', iconURL: 'attachment://camera.png'})
       .setThumbnail(guildEmoji.url)
-      .addField('Nom :', guildEmoji.name)
-      .addField('ID :', guildEmoji.id)
+      .addFields({name: 'Nom :', value: guildEmoji.name},
+                {name: 'ID :', value: guildEmoji.id})
       .setTimestamp()
-    )
-      return
-    
+
+    return guildEmoji.guild.channels.cache.get(constantes["logs_chris"]).send({embeds: [embed], files: ['assets/images/camera.png']})
 }

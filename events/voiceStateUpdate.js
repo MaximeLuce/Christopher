@@ -1,37 +1,40 @@
-const { MessageEmbed } = require('discord.js')
+const { EmbedBuilder, PermissionsBitField } = require('discord.js')
+const constantes = require('../assets/constantes.json');
+const aff_horaire = new Date();
 
 module.exports = (client, oldState, newState) => {
 
     if (!oldState.channel && newState.channel) {
 
-        oldState.guild.channels.cache.get('835593178064486470').send(new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor('#3867d6')
             .setTitle('Salon vocal rejoint')
-            .attachFiles(['assets/images/camera.png'])
-            .setAuthor('Logs', 'attachment://camera.png')
-            .addField('Utilisateur :', newState.member.user.tag)
-            .addField('Salon :', newState.channel)
+            .setAuthor({name: 'Logs', iconURL: 'attachment://camera.png'})
+            .addFields({name: 'Utilisateur :', value: newState.member.user.tag})
+            .addFields({name: 'Salon :', value: newState.channel.toString()})
             .setTimestamp()
-        );
 
-        newState.guild.channels.cache.get('609794221616136192').createOverwrite(newState.member.user, {
-          VIEW_CHANNEL : true,
-          READ_MESSAGE_HISTORY : true
+        oldState.guild.channels.cache.get(constantes["logs_chris"]).send({embeds: [embed], files: ['assets/images/camera.png']})
+
+        newState.guild.channels.cache.get(constantes["voice_chat"]).permissionOverwrites.create(newState.member.user, {
+          ViewChannel : true,
+          ReadMessageHistory : true
         })
       return
 
     } else if (oldState.channel && !newState.channel) {
 
-        oldState.guild.channels.cache.get('835593178064486470').send(new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor('#3867d6')
             .setTitle('Salon vocal quitté')
-            .attachFiles(['assets/images/camera.png'])
-            .setAuthor('Logs', 'attachment://camera.png')
-            .addField('Utilisateur :', oldState.member.user.tag)
-            .addField('Salon :', oldState.channel)
+            .setAuthor({name: 'Logs', iconURL: 'attachment://camera.png'})
+            .addFields({name: 'Utilisateur :', value: oldState.member.user.tag})
+            .addFields({name: 'Salon :', value: oldState.channel.toString()})
             .setTimestamp()
-        )
-        client.channels.cache.get('609794221616136192').permissionOverwrites.get(newState.member.user.id).delete();
+
+        oldState.guild.channels.cache.get(constantes["logs_chris"]).send({embeds: [embed], files: ['assets/images/camera.png']})
+
+        client.channels.cache.get(constantes["voice_chat"]).permissionOverwrites.cache.get(newState.member.user.id).delete()
       return
 
     } else {

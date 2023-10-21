@@ -1,4 +1,6 @@
-const { MessageEmbed } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
+const constantes = require('../assets/constantes.json');
+const aff_horaire = new Date();
 
 module.exports = async (_client, channelCreate) => {
     if(channelCreate.guild.id !== '506449018885242890') return
@@ -12,25 +14,24 @@ module.exports = async (_client, channelCreate) => {
       }
 
     if (channelCreate.type === 'category') {
-        channelCreate.guild.channels.cache.get('835593178064486470').send(new MessageEmbed()
+        const embed = new EmbedBuilder()
           .setColor('#3867d6')
-          .attachFiles(['assets/images/camera.png'])
-          .setAuthor('Logs', 'attachment://camera.png')
+          .setAuthor({name: 'Logs', iconURL: 'attachment://camera.png'})
           .setTitle("Catégorie crée")
-          .addField('Nom :', channelCreate.name)
+          .addFields({name: 'Nom :', value: channelCreate.name})
           .setTimestamp()
-        )
-        return
+
+        return channelCreate.guild.channels.cache.get(constantes["logs_chris"]).send({embeds: [embed], files: ['assets/images/camera.png']})
       }
-  
-      channelCreate.guild.channels.cache.get('835593178064486470').send(new MessageEmbed()
+
+      const embed2 = new EmbedBuilder()
         .setColor('#3867d6')
-        .attachFiles(['assets/images/camera.png'])
-        .setAuthor('Logs', 'attachment://camera.png')
+        .setAuthor({name: 'Logs', iconURL: 'attachment://camera.png'})
         .setTitle('Salon crée')
-        .addField('Nom :', channelCreate.name)
-        .addField('Type :', channeltype_info[channelCreate.type])
-        .addField('Catégorie :', channelCreate.parent)
+        .addFields({name: 'Nom :', value: channelCreate.name},
+                    {name: 'Type :', value: channeltype_info[channelCreate.type]},
+                    {name: 'Catégorie :', value: channelCreate.parent})
         .setTimestamp()
-      )
+  
+      channelCreate.guild.channels.cache.get(constantes["logs_chris"]).send({embeds: [embed], files: ['assets/images/camera.png']})
 }

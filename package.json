@@ -1,19 +1,13 @@
 {
-  "name": "Le Max de Culture",
-  "version": "1.0.0",
-  "description": "",
-  "main": "bot.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "discord.js": "^12.2.0",
-    "moment": "^2.29.1",
-    "mysql2": "^2.2.5",
-    "node-cron": "^3.0.0",
-    "node-fetch": "^2.6.0",
+    "date": "^2.0.2",
+    "dateformat": "^5.0.3",
+    "discord.js": "^14.8.0",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.41",
+    "mysql2": "^3.1.2",
+    "node-cron": "^3.0.2",
+    "node-fetch": "^3.3.0",
     "weather-js": "^2.0.0"
   }
 }

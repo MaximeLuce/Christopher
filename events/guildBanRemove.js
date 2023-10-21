@@ -1,16 +1,16 @@
-const { MessageEmbed } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
+const constantes = require('../assets/constantes.json');
+const aff_horaire = new Date();
 
 module.exports = async (_client, guild, user) => {
     if(guild.id !== '506449018885242890') return
 
-    guild.channels.cache.get('835593178064486470').send(new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor('#3867d6')
-      .attachFiles(['assets/images/camera.png'])
-      .setAuthor('Logs', 'attachment://camera.png')
+      .setAuthor({name: 'Logs', iconURL: 'attachment://camera.png'})
       .setTitle('Membre débanni :')
-      .addField('Membre :', user.tag)
+      .addFields({name: 'Membre :', value: user.tag})
       .setTimestamp()
-    )
-      return
-    
+
+    return guild.channels.cache.get(constantes["logs_chris"]).send({embeds: [embed], files: ['assets/images/camera.png']})
 }

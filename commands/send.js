@@ -1,13 +1,24 @@
-const { perms } = require('../config.json')
+const { Permissions } = require("discord.js");
+const constantes = require('../assets/constantes.json');
+const fs = require('fs')
+const aff_horaire = new Date();
+const log = './log.txt';
 
-exports.run = (client, message, args) => {
-  if (!message.member.roles.cache.some(r => r.id == 673268660458094603) && !message.member.hasPermission("ADMINISTRATOR")) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
+module.exports = {
+  name: 'send',
+  aliases: ['envoyer'],
+  description: 'Utilisation : &envoyer identifiant message | Permet d\'envoyer un message avec Christopher dans le salon dont on a fourni l\'identifiant.',
+  execute: (client, message, args) => {
+    if (!message.member.roles.cache.has(constantes['sentinelle'])) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
 
+    if(!args[0]) return message.channel.send("Il va me falloir un identifiant de salon !")
 
-  const arguments = args.splice(1).join(' ')
-  client.channels.cache.get(args[0]).send(arguments)
-}
-
-exports.help = {
-  name: 'send'
+    const arguments = args.splice(1).join(' ')
+    client.channels.cache.get(args[0]).send(arguments)
+      .catch(function(err) {
+          fs.appendFile(`${log}`, `${aff_horaire} — ${err}\n`, (err) => {
+              if(err) throw err;
+          });
+      });
+  }
 }

@@ -1,39 +1,41 @@
-const { MessageEmbed } = require('discord.js')
-const fetch = require('node-fetch')
-var dateFormat = require('dateformat');
+const { EmbedBuilder } = require('discord.js')
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const date = require('date')
 
-exports.run = async (_client, message, args) => {
+module.exports = {
+  name: 'itunes',
+  aliases: [],
+  description: 'Utilisation : &itunes titre | Cherche les informations relatives à la chanson donnée en paramètre.',
+  execute: async (_client, message, args) => {
 
     if (!args[0]) {
-        message.channel.send("Veuillez indiquer une musique !")
-        return
-      }
+      return message.channel.send("Veuillez indiquer une musique !")
+    }
 
-    const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(args.join(' '))}&media=music&entity=song&limit=1&explicit=${message.channel.nsfw ? 'yes' : 'no'}`)
-      const body = await res.json()
+    const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(args.join(' '))}&media=music&entity=song&limit=1`)
+    const body = await res.json()
 
-      if (!body.resultCount) {
-        message.channel.send('Aucun résultat trouvé !')
-        return
-      }
+    if (!body.resultCount) {
+      return message.channel.send('Aucun résultat trouvé !')
+    }
 
     const data = body.results[0]
 
-  const help = new MessageEmbed()
-    .setURL(data.trackViewUrl)
-    .setThumbnail(data.artworkUrl100)
-    .setTitle(data.trackName)
-    .addField("Artiste :", data.artistName)
-    .addField("Album :", data.collectionName)
-    .addField("Date de sortie :", dateFormat(data.releaseDate, "dd/mm/yyyy"))
-    .addField("Genre :", data.primaryGenreName)
-    .setColor('#3867d6')
-    .attachFiles(['assets/images/logo.png'])
-    .setAuthor('Le Max de Culture', 'attachment://logo.png', 'https://le-max-de-culture.fr/')
-    .setTimestamp()
-  message.channel.send(help)
-}
+    var date = Date.parse(data.releaseDate)/1000
+    date = new Date(date)
+    var date2 = date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear()
 
-exports.help = {
-  name: 'itunes'
+    const help = new EmbedBuilder()
+      .setURL(data.trackViewUrl)
+      .setThumbnail(data.artworkUrl100)
+      .setTitle(data.trackName)
+      .addFields({name: "Artiste :", value: data.artistName},
+                {name: "Album :", value: data.collectionName},
+                {name: "Date de sortie :", value: date2},
+                {name: "Genre :", value: data.primaryGenreName})
+      .setColor('#3867d6')
+      .setAuthor({name: 'Le Max de Culture', iconURL: 'attachment://logo.png', url: 'https://le-max-de-culture.fr/'})
+      .setTimestamp()
+    message.channel.send({embeds: [help], files: ['assets/images/logo.png']})
+  }
 }

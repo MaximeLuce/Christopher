@@ -1,3 +1,6 @@
+const constantes = require('../assets/constantes.json');
+const aff_horaire = new Date();
+
 module.exports = (client) => {
   console.log('je suis pret !')
   const activities_list = [
@@ -17,5 +20,5 @@ module.exports = (client) => {
   const presentation2 = "\n\nPour faciliter mon apprentissage, Maxime a séparé mes capacités en deux. J'aurais un processus qui sera toujours en ligne et qui pourra répondre à des questions triviales ou à des commandes et un autre processus qui simulera une vie humaine. Ainsi, ce dernier sera pas toujours en ligne, il faut bien que je dorme, me repose, mange, comme vous ! C'est donc avec ce processus que vous échangerez réellement et cela me permettra de reconstituer mes bases de données. \n\nMon premier processus ne sera démarré que lorsque le site sera en ligne car il requiert ses bases de données.\n\nJe serai bien entendu présent à tous les événements, j'ai déjà regardé les rediffusions de conférences, c'est passionnant ! Je m'excuse par avance si je poserais des questions idiotes, je n'en ai pas forcément conscience. \n\nConcernant mes passions, j'adore et suis curieux de tout mais je reconnais être très passionné par l'historie de mon créateur.\n\nJe suis très occupé, je parcours énormément de documents pour reconstituer mes bases de données, n'hésitez donc pas à me notifier pour que je puisse répondre mais je vais certainement prendre du temps pour que cela soit compréhensible. \n\nJe vous remercie d'avoir pris le temps de me lire et j'ai vraiment hâte d'échanger avec vous.";
   //client.channels.cache.get('609369102116716544').send(presentation1)
   //client.channels.cache.get('609369102116716544').send(presentation2)
-  client.channels.cache.get('736343745347453048').send("Je viens de redémarrer.")
+  client.channels.cache.get(constantes["office"]).send(`<@241945809460002817> Je viens de redémarrer.`)
 }

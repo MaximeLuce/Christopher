@@ -1,71 +1,75 @@
-const { MessageEmbed } = require('discord.js')
-const fetch = require('node-fetch')
+const { EmbedBuilder } = require('discord.js')
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const fs = require('fs')
+const aff_horaire = new Date();
+const log = './log.txt';
 
-exports.run = async (_client, message, args) => {
+module.exports = {
+  name: 'strawpoll',
+  aliases: ['vote', 'sondage'],
+  description: '[INDISPONIBLE] Utilisation : &vote question;réponse1;réponse2;réponse3;... | Crée un sondage strawpoll avec les informations correspondantes.',
+  execute: async (_client, message, args) => {
 
-    if (!args[0]) {
-        message.channel.send("Veuillez indiquer un sondage !")
-        return
-      }
-  
-      const arrayPoll = args.join(' ').split(';')
-      const question = arrayPoll[0]
-  
-      if (question.length > 400) {
-        message.channel.send("Votre question est trop longue !")
-        return
-      }
-  
-      arrayPoll.shift()
-  
-      if (arrayPoll.length < 2) {
-        message.channel.send("Il faut au moins deux rÃ©ponses possibles !")
-        return
-      }
-  
-      if (arrayPoll.length > 30) {
-        message.channel.send("Il ne faut pas plus de 30 rÃ©ponses")
-        return
-      }
-  
-      for (const element of arrayPoll) {
-        if (element.length > 400) {
-          message.channel.send("Une rÃ©ponse ne doit pas excÃ©der 400 caractÃ¨res !")
-          return
-        }
-        if (element.trim().length <= 0) {
-          arrayPoll.splice(arrayPoll.indexOf(element), 1)
-        }
-      }
+    return message.reply("Désolé, le sondage n'est plus disponible pour le moment !")
 
-      const res = await fetch('https://www.strawpoll.me/api/v2/polls', {
-        method: 'POST',
-        body: JSON.stringify({
-          title: question,
-          options: arrayPoll,
-          multi: true,
-          dupcheck: 'normal',
-          captcha: true
-        }),
-        headers: { 'Content-Type': 'application/json' }
-      })
-      const body = await res.json()
+    // if (!args[0]) {
+    //   return message.channel.send("Veuillez indiquer un sondage !")
+    // }
 
-      if (!body.id) {
-        message.channel.send("Une erreur est survenue, merci de réésayer plus tard !")
-        return
-      }
+    // const arrayPoll = args.join(' ').split(';')
+    // const question = arrayPoll[0]
 
-  const strawpoll = new MessageEmbed()
-    .setTitle('Strawpoll')
-    .addField("Lien :", `[[Cliquez ici]](https://www.strawpoll.me/${body.id})`)
-    .setColor('#3867d6')
-    .attachFiles(['assets/images/logo.png'])
-    .setAuthor('Le Max de Culture', 'attachment://logo.png', 'https://le-max-de-culture.fr/')
-    .setTimestamp()
-  message.channel.send(strawpoll)
-}
+    // if (question.length > 400) {
+    //   return message.channel.send("Votre question est trop longue !")
+    // }
 
-exports.help = {
-  name: 'strawpoll'
+    // arrayPoll.shift()
+
+    // if (arrayPoll.length < 2) {
+    //   return message.channel.send("Il faut au moins deux réponses possibles !")
+    // }
+
+    // if (arrayPoll.length > 30) {
+    //   return message.channel.send("Il ne faut pas plus de 30 réponses")
+    // }
+
+    // for (const element of arrayPoll) {
+    //   if (element.length > 400) {
+    //     return message.channel.send("Une réponse ne doit pas excéder 400 caractères !")
+    //   }
+    //   if (element.trim().length <= 0) {
+    //     arrayPoll.splice(arrayPoll.indexOf(element), 1)
+    //   }
+    // }
+
+    // const res = await fetch('https://api.strawpoll.com/v3/polls', {
+    //   method: 'POST',
+    //   body: JSON.stringify({
+    //     title: question,
+    //     options: arrayPoll,
+    //     multi: true,
+    //     dupcheck: 'normal',
+    //     captcha: true
+    //   }),
+    //   headers: { 'Content-Type': 'application/json' }
+    // })
+    // const body = await res.json()
+
+    // if (!body.id) {
+    //   return message.channel.send("Une erreur est survenue, merci de réessayer plus tard !")
+    // }
+
+    // const strawpoll = new EmbedBuilder()
+    //   .setTitle('Strawpoll')
+    //   .addField("Lien :", `[[Cliquez ici]](https://www.strawpoll.me/${body.id})`)
+    //   .setColor('#3867d6')
+    //   .setAuthor({name: 'Le Max de Culture', iconURL: 'attachment://logo.png', url: 'https://le-max-de-culture.fr/'})
+    //   .setTimestamp()
+    // message.channel.send({embeds: [strawpoll], files: ['assets/images/logo.png']})
+    //   .catch(function(err) {
+    //     fs.appendFile(`${log}`, `${aff_horaire} — ${err}\n`, (err) => {
+    //       if(err) throw err;
+    //     });
+    //   });
+  }
 }

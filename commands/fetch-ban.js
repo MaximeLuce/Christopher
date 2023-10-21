@@ -1,24 +1,25 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, Permissions } = require("discord.js");
 const { createConnection } = require('mysql2');
 const config = require('../config.json');
+const constantes = require('../assets/constantes.json');
+const fs = require('fs')
+const aff_horaire = new Date();
+const log = './log.txt';
 
-const connection = createConnection({
-    host: config.connexion.host,
-    user: config.connexion.user,
-    password: config.connexion.password,
-    database: config.connexion.database
-  });
-
-exports.run = async (client, message, args) => {
-    if (!message.member.hasPermission("BAN_MEMBERS")) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
+module.exports = {
+  name: 'fetch-ban',
+  aliases: [],
+  description: 'fetch-ban : Utilisation : &fetch-ban utilisateur motif | Permet de bannir l\'utilisateur dont l\'identifiant est en paramètre avec le motif donné.',
+  execute: async (client, message, args) => {
+    const connection = []
+    if (!message.member.roles.cache.has(constantes['sentinelle'])) return message.channel.send("Que voulais-tu faire ? Il n'y a rien à voir ici !")
 
         if(!args[0]) return message.channel.send("Tu dois m'indiquer un ID !")
         
-        const reason = args.slice(1).join(' ') || `Aucune raison spécifiée !`
+        const reason = args.slice(1).join(' ') || `Manquement au règlement`
 
-        if(!message.guild.me.hasPermission("BAN_MEMBERS")) {
+        if(!message.guild.members.me.permissions.has(PermissionsBitField.Flags.BanMembers))
             return message.channel.send("Je n'ai pas la permission pour ban !");
-        }
 
         try {
             const ban = await client.users.fetch(args[0])
@@ -34,24 +35,52 @@ exports.run = async (client, message, args) => {
                 let secondes = ("0" + date.getSeconds()).slice(-2);
                 affTime = jour+'/'+mois+'/'+date.getFullYear()+' '+heure+':'+minute+':'+secondes;
 
-                client.channels.cache.get("724669164072993063").send('**[Fetch-ban - <@'+message.author.id+'>]** '+affTime+', <@'+member.user.id+'> : '+reason);
+                client.channels.cache.get(constantes["suivi"]).send('**[Fetch-ban - <@'+message.author.id+'>]** '+affTime+', <@'+user.id+'> : '+reason);
     
-                client.channels.cache.get('745938396328755220').send(new MessageEmbed()
+                const embed = new EmbedBuilder()
                   .setColor('#3867d6')
                   .setTitle("BAN !")
-                  .addField('User :', user.tag)
-                  .addField('Banni par :', message.author.tag)
-                  .addField('Raison :', reason)
-                  .setTimestamp())
+                  .addFields({name: 'User :', value: user.tag},
+                            {name: 'Banni par :', value: message.author.tag},
+                            {name: 'Raison :', value: reason})
+                  .setTimestamp()
+
+                client.channels.cache.get(constantes["logs_arr"]).send({embeds: [embed]})
+                    .catch(function(err) {
+                        fs.appendFile(`${log}`, `${aff_horaire} — ${err}\n`, (err) => {
+                            if(err) throw err;
+                        });
+                    });
+            })
+            .catch(function(err) {
+                fs.appendFile(`${log}`, `${aff_horaire} — ${err}\n`, (err) => {
+                    if(err) throw err;
+                });
             });
 
-            connection.query(`INSERT INTO modlogs (modo, membre, motif, type, date) VALUES (?, ?, ?, ?, ?)`, [message.author.id, ban.user.id, reason, 4, Math.round(Date.now()/1000)])
-        } catch {
-            return message.channel.send('Cet utilisateur n\'existe pas !')
+            connection.push(createConnection({
+                host: config.connexion.host,
+                user: config.connexion.user,
+                password: config.connexion.password,
+                database: config.connexion.database
+              }));
+            connection[0].query(`INSERT INTO commun_suivi (modo, membre, motif, type, date) VALUES (?, ?, ?, ?, ?)`, 
+                [message.author.id, ban.id, reason, 4, Math.round(Date.now()/1000)], 
+                function(err, results){
+                    if(err){
+                        fs.appendFile(`${log}`, `${aff_horaire} — ${err}\n`, (err) => {
+                            if(err) throw err;
+                        });
+                    }
+                })
+            connection[0].end()
+            connection.shift()
+
+        } catch (error){
+            fs.appendFile(`${log}`, `${aff_horaire} — ${err}\n`, (err) => {
+                if(err) throw err;
+            });
         }
 
     }
-    
-exports.help = {
-    name: "fetch-ban"
 }
