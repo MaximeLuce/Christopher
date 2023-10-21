@@ -1,10 +1,10 @@
 {
     "token": "le_token_du_bot",
-    "perms": ["perms des admisn"],
+    "perms": ["perms des admins"],
     "connexion": {
-        "host": "localhost",
-        "user": "user",
-        "password": "Cmdp",
-        "database": "christopher"
+        "host": "",
+        "user": "",
+        "password": "",
+        "database": ""
     }
 }
