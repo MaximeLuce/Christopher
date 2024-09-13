@@ -1,13 +1,12 @@
-# Christopher
+## Présentation du repos "Christopher"
 Bot en Discord.js du serveur Discord
 
-# Description
-[A venir]
+## Mise à jour
+- 13/09/2024 :
+    - correction du fichier readme
+    - déploiement de la nouvelle version stable
 
-# Modification
-Pensez à bien mettre à jour ce fichier à chaque module ajouté/corrigé.
-
-# Liste des modules à programmer
+## Liste des modules à programmer
 <ul>
   <li>Commande de lecture de musique</li>
   <li>Réactions Rôles</li>
@@ -16,4 +15,19 @@ Pensez à bien mettre à jour ce fichier à chaque module ajouté/corrigé.
   <li>Supprimer les entrées relatives à un membre qui part</li>
 </ul>
 
-# Liste des bogues à corriger
+# Liste des bugs
+- aucun
+
+
+
+
+## Développement
+- Guillaume SICART
+- Alexis GILON
+
+## License
+
+[![CC0](https://licensebuttons.net/l/by-nc-nd/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+CC BY-NC-ND 4.0
+
+Attribution-NonCommercial-NoDerivatives 4.0 International
